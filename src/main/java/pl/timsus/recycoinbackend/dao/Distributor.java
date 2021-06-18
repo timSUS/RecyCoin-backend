@@ -1,14 +1,13 @@
 package pl.timsus.recycoinbackend.dao;
 
 import javax.persistence.*;
-import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "machines")
-public class Machine {
+@Table(name = "distributor")
+public class Distributor {
 
-    public Machine() {
+    public Distributor() {
     }
 
     @Id
@@ -18,8 +17,11 @@ public class Machine {
     @Column(name = "isActive", nullable = false)
     private Boolean isActive;
 
+    @Column(name = "maxTokensPerDay", nullable = false)
+    private Long maxTokensPerDay;
+
     @OneToMany(mappedBy="client")
-    private Set<Token> tokes;
+    private Set<Token> tokens;
 
     public Integer getId() {
         return id;
@@ -37,7 +39,15 @@ public class Machine {
         isActive = active;
     }
 
-    public Set<Token> getTokes() {
-        return tokes;
+    public Set<Token> getTokens() {
+        return tokens;
+    }
+
+    public Long getMaxTokensPerDay() {
+        return maxTokensPerDay;
+    }
+
+    public void setMaxTokensPerDay(Long maxTokensPerDay) {
+        this.maxTokensPerDay = maxTokensPerDay;
     }
 }

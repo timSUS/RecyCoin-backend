@@ -30,13 +30,16 @@ public class Token {
 
     @ManyToOne
     @JoinColumn(name="machine", nullable=false)
-    private Machine machine;
+    private Distributor distributor;
 
     @Column(name = "generated", nullable = false)
     private Instant generated;
 
     @Column(name = "consumed")
     private Instant consumed;
+
+    @Column(name = "value")
+    private Double value;
 
     public String getId() {
         return id;
@@ -62,14 +65,6 @@ public class Token {
         this.client = client;
     }
 
-    public Machine getMachine() {
-        return machine;
-    }
-
-    public void setMachine(Machine machine) {
-        this.machine = machine;
-    }
-
     public Instant getGenerated() {
         return generated;
     }
@@ -84,5 +79,22 @@ public class Token {
 
     public void setConsumed(Instant consumed) {
         this.consumed = consumed;
+    }
+
+
+    public Double getValue() {
+        return value;
+    }
+
+    public void setValue(Double value) {
+        this.value = value;
+    }
+
+    public Distributor getDistributor() {
+        return distributor;
+    }
+
+    public void setDistributor(Distributor distributor) {
+        this.distributor = distributor;
     }
 }

@@ -3,19 +3,19 @@ package pl.timsus.recycoinbackend.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class IdentifiersDto {
-    private final Integer machineId;
+    private final Integer distributorId;
     private final Integer clientId;
 
     public IdentifiersDto(
-            @JsonProperty(required = true) Integer machineId,
+            @JsonProperty(required = true) Integer distributorId,
             @JsonProperty(required = true) Integer clientId
     ) {
-        this.machineId = machineId;
+        this.distributorId = distributorId;
         this.clientId = clientId;
     }
 
-    public Integer getMachineId() {
-        return machineId;
+    public Integer getDistributorId() {
+        return distributorId;
     }
 
     public Integer getClientId() {
