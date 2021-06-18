@@ -1,9 +1,8 @@
 package pl.timsus.recycoinbackend.dao;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "client")
@@ -19,6 +18,9 @@ public class Client {
     @Column(name = "isActive", nullable = false)
     private Boolean isActive;
 
+    @OneToMany(mappedBy="client")
+    private Set<Token> tokes;
+
     public Integer getId() {
         return id;
     }
@@ -33,5 +35,9 @@ public class Client {
 
     public void setActive(Boolean active) {
         isActive = active;
+    }
+
+    public Set<Token> getTokens() {
+        return tokes;
     }
 }
