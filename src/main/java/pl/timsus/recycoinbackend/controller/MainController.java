@@ -12,6 +12,7 @@ import pl.timsus.recycoinbackend.data.MachineRepository;
 import pl.timsus.recycoinbackend.data.TokenRepository;
 import pl.timsus.recycoinbackend.dto.IdentifiersDto;
 import pl.timsus.recycoinbackend.dto.TokenDto;
+import pl.timsus.recycoinbackend.recycoinprovider.RecycoinService;
 
 import javax.transaction.Transactional;
 import java.time.Instant;
@@ -26,6 +27,12 @@ public class MainController {
     private final ClientRepository clientRepository;
     private final TokenRepository tokenRepository;
     private final MainService mainService;
+    private final RecycoinService recycoinService = new RecycoinService() {
+        @Override
+        public void sendRecycoin(int id) {
+            System.out.println("Sending recycoin to: " + id);
+        }
+    };
 
     @Autowired
     public MainController(MachineRepository machineRepository, ClientRepository clientRepository, TokenRepository tokenRepository, MainService mainService) {
@@ -37,12 +44,19 @@ public class MainController {
 
 
     @PostMapping("")
-    public String doA() {
-        return "a";
+    public @ResponseBody ResponseEntity<?> test() {
+        return ResponseEntity.status(HttpStatus.I_AM_A_TEAPOT).build();
     }
 
     @PostMapping("authorized")
-    public boolean isAuthorized(@RequestBody IdentifiersDto identifiersDto) {
+    public @ResponseBody ResponseEntity<Boolean> isAuthorized(@RequestBody IdentifiersDto identifiersDto) {
+        if (isAuthorizedInternal(identifiersDto)) {
+            return ResponseEntity.status(HttpStatus.OK).body(Boolean.TRUE);
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Boolean.FALSE);
+    }
+
+    private boolean isAuthorizedInternal(IdentifiersDto identifiersDto) {
         Optional<Machine> optionalMachine = machineRepository.findById(identifiersDto.getMachineId());
         if (optionalMachine.isEmpty()) {
             return false;
@@ -62,7 +76,7 @@ public class MainController {
 
     @PostMapping("createToken")
     public @ResponseBody ResponseEntity<Map<String, String>> createToken(@RequestBody IdentifiersDto identifiersDto) {
-        if (!isAuthorized(identifiersDto)) {
+        if (!isAuthorizedInternal(identifiersDto)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
@@ -87,11 +101,12 @@ public class MainController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("status", "already consumed"));
             }
 
-
-            //todo give tokens
             token.setUsed(true);
             token.setConsumed(Instant.now());
             tokenRepository.save(token);
+
+            recycoinService.sendRecycoin(token.getClient().getId());
+
             return ResponseEntity.status(HttpStatus.OK).body(Map.of("status", "consumed"));
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("status", "could not consume"));
