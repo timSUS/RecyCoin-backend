@@ -15,7 +15,6 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Predicate;
 
 
 @Service
@@ -50,7 +49,7 @@ public class MainService {
         long tokensToday = tokens.stream().filter(
                 token -> {
                     ZoneId z = ZoneId.of( "Europe/Warsaw" );
-                    LocalDate ld = LocalDate.ofInstant( token.getInstant() , z );
+                    LocalDate ld = LocalDate.ofInstant( token.getGenerated() , z );
                     return ld.isEqual(LocalDate.now());
                 }
         ).count();
@@ -64,7 +63,7 @@ public class MainService {
         Token token = new Token();
         token.setClient(client);
         token.setMachine(machine);
-        token.setInstant(Instant.now());
+        token.setGenerated(Instant.now());
         token.setUsed(false);
 
         token = tokenRepository.save(token);

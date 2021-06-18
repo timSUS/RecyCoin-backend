@@ -32,8 +32,11 @@ public class Token {
     @JoinColumn(name="machine", nullable=false)
     private Machine machine;
 
-    @Column(name = "instant")
-    private Instant instant;
+    @Column(name = "generated", nullable = false)
+    private Instant generated;
+
+    @Column(name = "consumed")
+    private Instant consumed;
 
     public String getId() {
         return id;
@@ -67,11 +70,19 @@ public class Token {
         this.machine = machine;
     }
 
-    public Instant getInstant() {
-        return instant;
+    public Instant getGenerated() {
+        return generated;
     }
 
-    public void setInstant(Instant instant) {
-        this.instant = instant;
+    public void setGenerated(Instant instant) {
+        this.generated = instant;
+    }
+
+    public Instant getConsumed() {
+        return consumed;
+    }
+
+    public void setConsumed(Instant consumed) {
+        this.consumed = consumed;
     }
 }

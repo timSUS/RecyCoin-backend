@@ -2,11 +2,11 @@ package pl.timsus.recycoinbackend.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class Identifiers {
+public class IdentifiersDto {
     private final Integer machineId;
     private final Integer clientId;
 
-    public Identifiers(
+    public IdentifiersDto(
             @JsonProperty(required = true) Integer machineId,
             @JsonProperty(required = true) Integer clientId
     ) {
