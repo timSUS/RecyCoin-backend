@@ -10,6 +10,11 @@ public class Client {
     public Client() {
     }
 
+    public Client(Integer id, Boolean isActive) {
+        this.id = id;
+        this.isActive = isActive;
+    }
+
     @Id
     @Column(name = "id", nullable = false)
     private Integer id;

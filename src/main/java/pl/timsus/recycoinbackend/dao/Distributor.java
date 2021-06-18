@@ -10,6 +10,12 @@ public class Distributor {
     public Distributor() {
     }
 
+    public Distributor(Integer id, Boolean isActive, Long maxTokensPerDay) {
+        this.id = id;
+        this.isActive = isActive;
+        this.maxTokensPerDay = maxTokensPerDay;
+    }
+
     @Id
     @Column(name = "id", nullable = false)
     private Integer id;
