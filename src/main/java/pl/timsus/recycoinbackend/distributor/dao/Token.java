@@ -3,6 +3,7 @@ package pl.timsus.recycoinbackend.distributor.dao;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.Instant;
 
 @Entity
@@ -39,7 +40,7 @@ public class Token {
     private Instant consumed;
 
     @Column(name = "value")
-    private Double value;
+    private BigDecimal value;
 
     public String getId() {
         return id;
@@ -82,11 +83,11 @@ public class Token {
     }
 
 
-    public Double getValue() {
+    public BigDecimal getValue() {
         return value;
     }
 
-    public void setValue(Double value) {
+    public void setValue(BigDecimal value) {
         this.value = value;
     }
 

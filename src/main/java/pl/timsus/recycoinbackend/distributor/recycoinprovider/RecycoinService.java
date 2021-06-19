@@ -1,5 +1,7 @@
 package pl.timsus.recycoinbackend.distributor.recycoinprovider;
 
+import java.math.BigDecimal;
+
 public interface RecycoinService {
-    void sendRecyCoin(int id, double value);
+    void sendRecyCoin(int id, BigDecimal value);
 }

@@ -1,4 +1,4 @@
-package pl.timsus.recycoinbackend.distributor.controller;
+package pl.timsus.recycoinbackend.distributor.distributor;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,11 +7,12 @@ import org.springframework.stereotype.Service;
 import pl.timsus.recycoinbackend.distributor.dao.Client;
 import pl.timsus.recycoinbackend.distributor.dao.Distributor;
 import pl.timsus.recycoinbackend.distributor.dao.Token;
-import pl.timsus.recycoinbackend.distributor.data.ClientRepository;
-import pl.timsus.recycoinbackend.distributor.data.DistributorRepository;
-import pl.timsus.recycoinbackend.distributor.data.TokenRepository;
+import pl.timsus.recycoinbackend.distributor.repository.ClientRepository;
+import pl.timsus.recycoinbackend.distributor.repository.DistributorRepository;
+import pl.timsus.recycoinbackend.distributor.repository.TokenRepository;
 
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -44,16 +45,16 @@ public class DistributorService {
 
     //przy założeniu, że user i machine istnieje
     @Transactional
-    public Optional<String> generateCode(int userId, int machineId, double value) {
+    public Optional<String> generateCode(int userId, int machineId, BigDecimal value) {
         Client client = clientRepository.findById(userId).get();
         Distributor distributor = distributorRepository.findById(machineId).get();
 
         Set<Token> clientTokens = client.getTokens();
         Set<Token> distributorTokens = distributor.getTokens();
 
-        double tokensTodayClient = getValueOfActiveTodaysTokens(clientTokens);
+        BigDecimal tokensTodayClient = getValueOfActiveTodaysTokens(clientTokens);
 
-        double tokensTodayDistributor = getValueOfActiveTodaysTokens(distributorTokens);
+        BigDecimal tokensTodayDistributor = getValueOfActiveTodaysTokens(distributorTokens);
 
         logger.info(
                 "Request of {} token(s) generation for user: {}, distributor: {}, tokens generated for user today: {}, tokens distributed by distributor: {}/{}",
@@ -65,13 +66,13 @@ public class DistributorService {
                 distributor.getMaxTokensPerDay()
         );
 
-        double tokensLeftTodayClient = getTokensLeftToday(client);
-        if (tokensLeftTodayClient < value) {
+        BigDecimal tokensLeftTodayClient = getTokensLeftToday(client);
+        if (tokensLeftTodayClient.compareTo(value) < 0) {
             return Optional.empty();
         }
 
-        double tokensLeftTodayDistributor = getTokensLeftToday(distributor);
-        if (tokensLeftTodayDistributor < value) {
+        BigDecimal tokensLeftTodayDistributor = getTokensLeftToday(distributor);
+        if (tokensLeftTodayDistributor.compareTo(value) < 0) {
             return Optional.empty();
         }
 
@@ -96,24 +97,24 @@ public class DistributorService {
         return Optional.of(tokenId);
     }
 
-    public double getTokensLeftToday(Distributor distributor) {
-        return distributor.getMaxTokensPerDay() - getValueOfActiveTodaysTokens(distributor.getTokens());
+    public BigDecimal getTokensLeftToday(Distributor distributor) {
+        return BigDecimal.valueOf(distributor.getMaxTokensPerDay()).subtract(getValueOfActiveTodaysTokens(distributor.getTokens()));
     }
 
-    public double getTokensLeftToday(Client client) {
-        return tokenUserLimit - getValueOfActiveTodaysTokens(client.getTokens());
+    public BigDecimal getTokensLeftToday(Client client) {
+        return BigDecimal.valueOf(tokenUserLimit).subtract((getValueOfActiveTodaysTokens(client.getTokens())));
     }
 
-    public Double getValueOfActiveTodaysTokens(Set<Token> tokens) {
+    public BigDecimal getValueOfActiveTodaysTokens(Set<Token> tokens) {
         return tokens
                 .stream()
                 .filter(this::todaysToken)
                 .map(Token::getValue)
-                .reduce(0.0, this::sum);
+                .reduce(BigDecimal.ZERO, this::sum);
     }
 
-    private double sum(double a1, double a2) {
-        return a1 + a2;
+    private BigDecimal sum(BigDecimal a1, BigDecimal a2) {
+        return a1.add(a2);
     }
 
     private boolean todaysToken(Token token) {

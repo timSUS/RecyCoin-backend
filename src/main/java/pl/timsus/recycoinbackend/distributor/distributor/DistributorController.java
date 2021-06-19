@@ -1,4 +1,4 @@
-package pl.timsus.recycoinbackend.distributor.controller;
+package pl.timsus.recycoinbackend.distributor.distributor;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,15 +9,16 @@ import org.springframework.web.bind.annotation.*;
 import pl.timsus.recycoinbackend.distributor.dao.Client;
 import pl.timsus.recycoinbackend.distributor.dao.Distributor;
 import pl.timsus.recycoinbackend.distributor.dao.Token;
-import pl.timsus.recycoinbackend.distributor.data.ClientRepository;
-import pl.timsus.recycoinbackend.distributor.data.DistributorRepository;
-import pl.timsus.recycoinbackend.distributor.data.TokenRepository;
+import pl.timsus.recycoinbackend.distributor.repository.ClientRepository;
+import pl.timsus.recycoinbackend.distributor.repository.DistributorRepository;
+import pl.timsus.recycoinbackend.distributor.repository.TokenRepository;
 import pl.timsus.recycoinbackend.distributor.dto.IdentifiersDto;
 import pl.timsus.recycoinbackend.distributor.dto.IdentifiersValueDto;
 import pl.timsus.recycoinbackend.distributor.dto.TokenDto;
 import pl.timsus.recycoinbackend.distributor.recycoinprovider.RecycoinService;
 
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.Map;
 import java.util.Optional;
@@ -34,7 +35,7 @@ public class DistributorController {
     private final DistributorService distributorService;
     private final RecycoinService recycoinService = new RecycoinService() {
         @Override
-        public void sendRecyCoin(int id, double value) {
+        public void sendRecyCoin(int id, BigDecimal value) {
             logger.info("Sending RecyCoin of value {} to {}", value, id);
         }
     };
@@ -122,9 +123,9 @@ public class DistributorController {
     public @ResponseBody ResponseEntity<Map<String, String>> getDistributorLimit(@PathVariable("id") int id) {
         Optional<Distributor> optionalDistributor = distributorRepository.findById(id);
         if (optionalDistributor.isPresent()) {
-            double valueLeft = distributorService.getTokensLeftToday(optionalDistributor.get());
+            BigDecimal valueLeft = distributorService.getTokensLeftToday(optionalDistributor.get());
 
-            return ResponseEntity.status(HttpStatus.OK).body(Map.of("dailyLimitLeft", valueLeft + ""));
+            return ResponseEntity.status(HttpStatus.OK).body(Map.of("dailyLimitLeft", valueLeft.toPlainString()));
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "bad id"));
         }
@@ -135,9 +136,9 @@ public class DistributorController {
     public @ResponseBody ResponseEntity<Map<String, String>> getClientLimit(@PathVariable("id") int id) {
         Optional<Client> optionalClient = clientRepository.findById(id);
         if (optionalClient.isPresent()) {
-            double valueLeft = distributorService.getTokensLeftToday(optionalClient.get());
+            BigDecimal valueLeft = distributorService.getTokensLeftToday(optionalClient.get());
 
-            return ResponseEntity.status(HttpStatus.OK).body(Map.of("dailyLimitLeft", valueLeft + ""));
+            return ResponseEntity.status(HttpStatus.OK).body(Map.of("dailyLimitLeft", valueLeft.toPlainString()));
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "bad id"));
         }
