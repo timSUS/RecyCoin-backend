@@ -12,9 +12,11 @@ public class Account {
     public Account() {
     }
 
-    public Account(Integer id, BigDecimal balance) {
+    public Account(Integer id, BigDecimal recyCoinBalance, Long claimedTokens, BigDecimal tokenBalance) {
         this.id = id;
-        this.balance = balance;
+        this.recyCoinBalance = recyCoinBalance;
+        this.claimedTokens = claimedTokens;
+        this.tokenBalance = tokenBalance;
     }
 
     @Id
@@ -24,8 +26,14 @@ public class Account {
     @OneToOne(mappedBy = "account")
     private Client client;
 
-    @Column(name = "balance", nullable = false)
-    private BigDecimal balance;
+    @Column(name = "recyCoinBalance", nullable = false)
+    private BigDecimal recyCoinBalance;
+
+    @Column(name = "tokenBalance", nullable = false)
+    private BigDecimal tokenBalance;
+
+    @Column(name = "claimedTokens", nullable = false)
+    private Long claimedTokens;
 
     public Integer getId() {
         return id;
@@ -43,11 +51,27 @@ public class Account {
         this.client = client;
     }
 
-    public BigDecimal getBalance() {
-        return balance;
+    public BigDecimal getRecyCoinBalance() {
+        return recyCoinBalance;
     }
 
-    public void setBalance(BigDecimal balance) {
-        this.balance = balance;
+    public void setRecyCoinBalance(BigDecimal balance) {
+        this.recyCoinBalance = balance;
+    }
+
+    public Long getClaimedTokens() {
+        return claimedTokens;
+    }
+
+    public void setClaimedTokens(Long claimedTokens) {
+        this.claimedTokens = claimedTokens;
+    }
+
+    public BigDecimal getTokenBalance() {
+        return tokenBalance;
+    }
+
+    public void setTokenBalance(BigDecimal tokenBalance) {
+        this.tokenBalance = tokenBalance;
     }
 }

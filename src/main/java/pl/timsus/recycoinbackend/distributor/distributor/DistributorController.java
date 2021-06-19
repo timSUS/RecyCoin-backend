@@ -33,19 +33,15 @@ public class DistributorController {
     private final ClientRepository clientRepository;
     private final TokenRepository tokenRepository;
     private final DistributorService distributorService;
-    private final RecycoinService recycoinService = new RecycoinService() {
-        @Override
-        public void sendRecyCoin(int id, BigDecimal value) {
-            logger.info("Sending RecyCoin of value {} to {}", value, id);
-        }
-    };
+    private final RecycoinService recycoinService;
 
     @Autowired
-    public DistributorController(DistributorRepository distributorRepository, ClientRepository clientRepository, TokenRepository tokenRepository, DistributorService distributorService) {
+    public DistributorController(DistributorRepository distributorRepository, ClientRepository clientRepository, TokenRepository tokenRepository, DistributorService distributorService, RecycoinService recycoinService) {
         this.distributorRepository = distributorRepository;
         this.clientRepository = clientRepository;
         this.tokenRepository = tokenRepository;
         this.distributorService = distributorService;
+        this.recycoinService = recycoinService;
     }
 
 
@@ -107,13 +103,18 @@ public class DistributorController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("status", "already consumed"));
             }
 
-            token.setUsed(true);
-            token.setConsumed(Instant.now());
-            tokenRepository.save(token);
 
-            recycoinService.sendRecyCoin(token.getClient().getId(), token.getValue());
+            boolean sent = recycoinService.sendRecyCoin(token.getClient().getId(), token.getValue());
 
-            return ResponseEntity.status(HttpStatus.OK).body(Map.of("status", "consumed"));
+            if (sent) {
+                token.setUsed(true);
+                token.setConsumed(Instant.now());
+                tokenRepository.save(token);
+
+                return ResponseEntity.status(HttpStatus.OK).body(Map.of("status", "consumed"));
+            } else {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            }
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("status", "could not consume"));
     }

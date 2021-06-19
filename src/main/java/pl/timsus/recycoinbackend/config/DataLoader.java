@@ -36,11 +36,11 @@ public class DataLoader implements ApplicationRunner {
         if (clientRepository.count() == 0 && distributorRepository.count() == 0) {
             logger.info("Database clients and distributor clear, initializing it!");
 
-            accountRepository.save(new Account(1, BigDecimal.ZERO));
-            accountRepository.save(new Account(2, BigDecimal.ZERO));
-            accountRepository.save(new Account(3, BigDecimal.ZERO));
-            accountRepository.save(new Account(4, BigDecimal.ZERO));
-            accountRepository.save(new Account(5, BigDecimal.ZERO));
+            accountRepository.save(new Account(1, BigDecimal.ZERO, 0L, BigDecimal.ZERO));
+            accountRepository.save(new Account(2, BigDecimal.ZERO, 0L, BigDecimal.ZERO));
+            accountRepository.save(new Account(3, BigDecimal.ZERO, 0L, BigDecimal.ZERO));
+            accountRepository.save(new Account(4, BigDecimal.ZERO, 0L, BigDecimal.ZERO));
+            accountRepository.save(new Account(5, BigDecimal.ZERO, 0L, BigDecimal.ZERO));
 
             clientRepository.save(new Client(1, true, accountRepository.findById(1).get()));
             clientRepository.save(new Client(2, false, accountRepository.findById(2).get()));
