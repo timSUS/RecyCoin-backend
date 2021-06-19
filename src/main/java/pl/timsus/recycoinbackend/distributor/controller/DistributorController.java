@@ -117,4 +117,30 @@ public class DistributorController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("status", "could not consume"));
     }
 
+    @GetMapping("distributorLimits/{id}")
+    @Transactional
+    public @ResponseBody ResponseEntity<Map<String, String>> getDistributorLimit(@PathVariable("id") int id) {
+        Optional<Distributor> optionalDistributor = distributorRepository.findById(id);
+        if (optionalDistributor.isPresent()) {
+            double valueLeft = distributorService.getTokensLeftToday(optionalDistributor.get());
+
+            return ResponseEntity.status(HttpStatus.OK).body(Map.of("dailyLimitLeft", valueLeft + ""));
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "bad id"));
+        }
+    }
+
+    @GetMapping("clientLimits/{id}")
+    @Transactional
+    public @ResponseBody ResponseEntity<Map<String, String>> getClientLimit(@PathVariable("id") int id) {
+        Optional<Client> optionalClient = clientRepository.findById(id);
+        if (optionalClient.isPresent()) {
+            double valueLeft = distributorService.getTokensLeftToday(optionalClient.get());
+
+            return ResponseEntity.status(HttpStatus.OK).body(Map.of("dailyLimitLeft", valueLeft + ""));
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "bad id"));
+        }
+    }
+
 }

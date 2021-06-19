@@ -6,10 +6,10 @@ public class IdentifiersValueDto extends IdentifiersDto{
     private final Double value;
 
     public IdentifiersValueDto(
-            @JsonProperty(required = true) Integer machineId,
+            @JsonProperty(required = true) Integer distributorId,
             @JsonProperty(required = true) Integer clientId,
             @JsonProperty(required = true) Double value) {
-        super(machineId, clientId);
+        super(distributorId, clientId);
         this.value = value;
     }
 

@@ -95,7 +95,15 @@ public class DistributorService {
         return Optional.of(tokenId);
     }
 
-    private Double getValueOfActiveTodaysTokens(Set<Token> tokens) {
+    public double getTokensLeftToday(Distributor distributor) {
+        return distributor.getMaxTokensPerDay() - getValueOfActiveTodaysTokens(distributor.getTokens());
+    }
+
+    public double getTokensLeftToday(Client client) {
+        return tokenUserLimit - getValueOfActiveTodaysTokens(client.getTokens());
+    }
+
+    public Double getValueOfActiveTodaysTokens(Set<Token> tokens) {
         return tokens
                 .stream()
                 .filter(this::todaysToken)
