@@ -48,6 +48,15 @@ public class TransferService implements RecycoinService {
         return true;
     }
 
+    @Override
+    public Optional<BigDecimal> getOwnedRecyCoin(int id) {
+        Optional<Client> client = clientRepository.findById(id);
+        if (!client.isPresent()) {
+            return Optional.empty();
+        }
+        return Optional.of(client.get().getAccount().getRecyCoinBalance());
+    }
+
     public void updateCoinsForAccount(Integer id) {
         while (true) {
             Account account = accountRepository.findById(id).get();

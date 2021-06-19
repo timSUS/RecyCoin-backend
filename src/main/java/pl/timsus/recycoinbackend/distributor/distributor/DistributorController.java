@@ -103,15 +103,26 @@ public class DistributorController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("status", "already consumed"));
             }
 
+            int clientId = token.getClient().getId();
 
-            boolean sent = recycoinService.sendRecyCoin(token.getClient().getId(), token.getValue());
+            Optional<BigDecimal> statusBefore = recycoinService.getOwnedRecyCoin(clientId);
+
+            boolean sent = recycoinService.sendRecyCoin(clientId, token.getValue());
 
             if (sent) {
                 token.setUsed(true);
                 token.setConsumed(Instant.now());
                 tokenRepository.save(token);
 
-                return ResponseEntity.status(HttpStatus.OK).body(Map.of("status", "consumed"));
+                Optional<BigDecimal> statusAfter = recycoinService.getOwnedRecyCoin(clientId);
+
+                return ResponseEntity.status(HttpStatus.OK).body(
+                        Map.of(
+                                "status", "consumed",
+                                "owned", statusAfter.get().toPlainString(),
+                                "gained", statusAfter.get().subtract(statusBefore.get()).toPlainString()
+                        )
+                );
             } else {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
             }
