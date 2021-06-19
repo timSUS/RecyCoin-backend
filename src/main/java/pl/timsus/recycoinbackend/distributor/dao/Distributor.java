@@ -26,7 +26,7 @@ public class Distributor {
     @Column(name = "maxTokensPerDay", nullable = false)
     private Long maxTokensPerDay;
 
-    @OneToMany(mappedBy="client")
+    @OneToMany(mappedBy="distributor")
     private Set<Token> tokens;
 
     public Integer getId() {
