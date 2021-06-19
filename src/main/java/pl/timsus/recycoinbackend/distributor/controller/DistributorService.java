@@ -64,13 +64,14 @@ public class DistributorService {
                 tokensTodayDistributor,
                 distributor.getMaxTokensPerDay()
         );
-        System.out.println(tokensTodayClient);
 
-        if (value + tokensTodayClient >= tokenUserLimit) {
+        double tokensLeftTodayClient = getTokensLeftToday(client);
+        if (tokensLeftTodayClient < value) {
             return Optional.empty();
         }
 
-        if (value + tokensTodayDistributor >= distributor.getMaxTokensPerDay()) {
+        double tokensLeftTodayDistributor = getTokensLeftToday(distributor);
+        if (tokensLeftTodayDistributor < value) {
             return Optional.empty();
         }
 

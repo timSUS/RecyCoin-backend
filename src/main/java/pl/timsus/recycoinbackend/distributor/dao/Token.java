@@ -25,11 +25,11 @@ public class Token {
     private Boolean isUsed;
 
     @ManyToOne
-    @JoinColumn(name="client", nullable=false)
+    @JoinColumn(name="client", nullable = false)
     private Client client;
 
     @ManyToOne
-    @JoinColumn(name="machine", nullable=false)
+    @JoinColumn(name="distributor", nullable = false)
     private Distributor distributor;
 
     @Column(name = "generated", nullable = false)
