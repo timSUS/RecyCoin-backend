@@ -1,8 +1,8 @@
-package pl.timsus.recycoinbackend.data;
+package pl.timsus.recycoinbackend.distributor.data;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-import pl.timsus.recycoinbackend.dao.Client;
+import pl.timsus.recycoinbackend.distributor.dao.Client;
 
 @Repository
 public interface ClientRepository extends CrudRepository<Client, Integer> {

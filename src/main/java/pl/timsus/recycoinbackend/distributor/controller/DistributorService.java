@@ -1,15 +1,15 @@
-package pl.timsus.recycoinbackend.controller;
+package pl.timsus.recycoinbackend.distributor.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import pl.timsus.recycoinbackend.dao.Client;
-import pl.timsus.recycoinbackend.dao.Distributor;
-import pl.timsus.recycoinbackend.dao.Token;
-import pl.timsus.recycoinbackend.data.ClientRepository;
-import pl.timsus.recycoinbackend.data.DistributorRepository;
-import pl.timsus.recycoinbackend.data.TokenRepository;
+import pl.timsus.recycoinbackend.distributor.dao.Client;
+import pl.timsus.recycoinbackend.distributor.dao.Distributor;
+import pl.timsus.recycoinbackend.distributor.dao.Token;
+import pl.timsus.recycoinbackend.distributor.data.ClientRepository;
+import pl.timsus.recycoinbackend.distributor.data.DistributorRepository;
+import pl.timsus.recycoinbackend.distributor.data.TokenRepository;
 
 import javax.transaction.Transactional;
 import java.time.Instant;
@@ -20,9 +20,9 @@ import java.util.Set;
 
 
 @Service
-public class MainService {
+public class DistributorService {
 
-    private final Logger logger = LoggerFactory.getLogger(MainService.class);
+    private final Logger logger = LoggerFactory.getLogger(DistributorService.class);
 
     private final ClientRepository clientRepository;
     private final DistributorRepository distributorRepository;
@@ -30,7 +30,7 @@ public class MainService {
 
     private final double tokenUserLimit;
 
-    public MainService(
+    public DistributorService(
             ClientRepository clientRepository,
             DistributorRepository distributorRepository,
             TokenRepository tokenRepository,

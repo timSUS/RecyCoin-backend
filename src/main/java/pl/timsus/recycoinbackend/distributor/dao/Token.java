@@ -1,4 +1,4 @@
-package pl.timsus.recycoinbackend.dao;
+package pl.timsus.recycoinbackend.distributor.dao;
 
 import org.hibernate.annotations.GenericGenerator;
 

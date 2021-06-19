@@ -1,4 +1,4 @@
-package pl.timsus.recycoinbackend.dao;
+package pl.timsus.recycoinbackend.distributor.dao;
 
 import javax.persistence.*;
 import java.util.Set;

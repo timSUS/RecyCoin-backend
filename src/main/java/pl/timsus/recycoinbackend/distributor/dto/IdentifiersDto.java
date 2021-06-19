@@ -1,4 +1,4 @@
-package pl.timsus.recycoinbackend.dto;
+package pl.timsus.recycoinbackend.distributor.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

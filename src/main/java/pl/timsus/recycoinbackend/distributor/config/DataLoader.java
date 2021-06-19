@@ -1,14 +1,14 @@
-package pl.timsus.recycoinbackend.config;
+package pl.timsus.recycoinbackend.distributor.config;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
-import pl.timsus.recycoinbackend.dao.Client;
-import pl.timsus.recycoinbackend.dao.Distributor;
-import pl.timsus.recycoinbackend.data.ClientRepository;
-import pl.timsus.recycoinbackend.data.DistributorRepository;
+import pl.timsus.recycoinbackend.distributor.dao.Client;
+import pl.timsus.recycoinbackend.distributor.dao.Distributor;
+import pl.timsus.recycoinbackend.distributor.data.ClientRepository;
+import pl.timsus.recycoinbackend.distributor.data.DistributorRepository;
 
 @Component
 public class DataLoader implements ApplicationRunner {
